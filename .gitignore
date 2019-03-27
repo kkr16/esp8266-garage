@@ -2,3 +2,4 @@
 *.s#*
 .DS_Store
 secrets.h
+build/
