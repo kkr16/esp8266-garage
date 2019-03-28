@@ -8,7 +8,7 @@ build:
     - mkdir /tmp/gitlab_esp8266_garage
     - cd /tmp/gitlab_esp8266_garage
     - git clone --recurse-submodules git@github.com:kkr16/esp8266-garage.git
-    - arduino --pref build.path=./build --board esp8266:esp8266:d1_mini_lite:xtal=80,eesz=1M --verify /tmp/esp8266-garage/esp8266-garage.ino --save-prefs
+    - arduino --pref build.path=./build --board esp8266:esp8266:d1_mini_lite:CpuFrequency=80,FlashSize=1M0 --verify /tmp/esp8266-garage/esp8266-garage.ino --save-prefs
 
 deploy:
   stage: deploy
