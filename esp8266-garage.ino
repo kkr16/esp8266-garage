@@ -23,7 +23,7 @@ PubSubClient client(espClient);
 // Temperature sensor setup
 const int DHTPIN = D4;
 #define DHTTYPE DHT22
-const int readFrequency = 20000;
+const int readFrequency = 60000;
 static unsigned long lastRefreshTime = 0;
 DHT dht(DHTPIN, DHTTYPE);
 
