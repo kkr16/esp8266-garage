@@ -3,7 +3,7 @@
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
 #include <PubSubClient.h>
-#include "DHT.h"
+#include <DHT.h>
 #include "secrets.h"
 
 // Wifi details
