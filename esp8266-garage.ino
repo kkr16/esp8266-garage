@@ -23,9 +23,12 @@ PubSubClient client(espClient);
 // Temperature sensor setup
 const int DHTPIN = D4;
 #define DHTTYPE DHT22
-const int readFrequency = 60000;
+const int readFrequency = 30000;
 static unsigned long lastRefreshTime = 0;
 DHT dht(DHTPIN, DHTTYPE);
+float tempavg = 0;
+int tempavgcount = 0;
+const int smoothingsize = 10;
 
 // Door opener relay setup
 const int RELAYPIN = D1;
@@ -220,18 +223,27 @@ void dhtLoop() {
     hpayload = String(h, 1);
     client.publish("garage/humidity", (char*) hpayload.c_str());
   }
+  
   float t = dht.readTemperature();
   if ((!isnan(t))) {
+    tempavg = (tempavg*tempavgcount + t)/(tempavgcount+1);
+    String tavgpayload;
+    tavgpayload = String(tempavgcount, 1);
+    client.publish("garage/temperatureavgcount", (char*) tavgpayload.c_str());
+    if (tempavgcount < smoothingsize)
+    {
+      tempavgcount++;
+    }
     String tpayload;
-    tpayload = String(t, 1);
+    tpayload = String(tempavg, 1);
     client.publish("garage/temperature", (char*) tpayload.c_str());
   }
 }
 
 void activateOpener() {
-  digitalWrite(RELAYPIN, HIGH);   // Turn the LED on (Note that LOW is the voltage level
+  digitalWrite(RELAYPIN, HIGH);   
   delay(openerDuration);
-  digitalWrite(RELAYPIN, LOW);   // Turn the LED on (Note that LOW is the voltage level
+  digitalWrite(RELAYPIN, LOW);
 }
 
 

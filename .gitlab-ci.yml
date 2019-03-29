@@ -1,19 +1,10 @@
 stages:
   - build
-  - deploy
 
 build:
   stage: build
   script:
-    - mkdir /tmp/gitlab_esp8266_garage
-    - cd /tmp/gitlab_esp8266_garage
-    - git clone --recurse-submodules git@github.com:kkr16/esp8266-garage.git
-    - arduino --pref build.path=./build --board esp8266:esp8266:d1_mini_lite:CpuFrequency=80,FlashSize=1M0 --verify /tmp/esp8266-garage/esp8266-garage.ino --save-prefs
-
-deploy:
-  stage: deploy
-  script:
-    - cd /tmp/gitlab_esp8266_garage 
-    - espota.py -d -i 192.168.3.100 -f build/esp8266-garage.ino.bin
-    - rm -rf /tmp/gitlab_esp8266_garage
-
+    - git submodule sync
+    - git submodule update --init
+    - arduino --pref build.path=./build --board esp8266:esp8266:d1_mini_lite:CpuFrequency=80,FlashSize=1M0 --verify ./esp8266-garage.ino --save-prefs
+    - espota.py -d -i 192.168.3.100 -f ./build/esp8266-garage.ino.bin
